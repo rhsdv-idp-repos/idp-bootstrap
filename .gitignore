@@ -2,6 +2,6 @@ hack/**
 hacking/**
 secrets/**
 venv/**
+inventory/**
 hack.md
 .env
-ansible.cfg
