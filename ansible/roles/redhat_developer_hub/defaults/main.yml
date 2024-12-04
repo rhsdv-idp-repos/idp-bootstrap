@@ -1,4 +1,7 @@
 ---
+guid: 'idp' # remove this later, only used in the Quay URI
+
+
 ocp4_username: system:admin
 become_override: false
 silent: false

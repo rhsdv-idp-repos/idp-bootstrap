@@ -2,5 +2,6 @@
   hosts: localhost
 
   roles:
+    - role: ../roles/redhat_developer_hub_bootstrap
     - role: ../roles/redhat_developer_hub
-    #- role: ../roles/redhat_developer_hub_bootstrap
+

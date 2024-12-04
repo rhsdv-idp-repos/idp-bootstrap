@@ -41,7 +41,7 @@ ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_workflows:
 
 ocp4_workload_redhat_developer_hub_bootstrap_backstage_namespace: backstage
 
-ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_enabled: "{{ orchestrator_enabled | default('true') | bool }}"
+ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_enabled: "{{ default('true') | bool }}"
 ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_channel: alpha
 ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_catalog_setup: true
 ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_catalog_image: quay.io/orchestrator/orchestrator-operator-catalog
@@ -49,3 +49,12 @@ ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_catalog_image_tag: v1.
 ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_serverless_enabled: "{{ not rhoai_enabled | default('true') }}"
 ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_serverless_name: logic-operator-rhel8
 ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_serverless_starting_csv: logic-operator-rhel8.v1.34.0
+
+ocp4_workload_quay_operator_namespace: "quay-enterprise"
+ocp4_workload_quay_operator_registry_name: "quay-registry"
+
+#ocp4_workload_quay_operator_superuser_password: "admin123"
+ocp4_workload_quay_operator_superuser_email: "admin@example.com"
+ocp4_workload_quay_operator_superuser_username: "quayadmin"
+# CHANGEME make this dynamic by querying the quay operator CSV
+quay_operator_version: "v3.13.1"

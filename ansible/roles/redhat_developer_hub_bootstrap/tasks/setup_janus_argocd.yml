@@ -4,7 +4,7 @@
     state: present
     name: argocd
     namespace: janus-argocd
-    chart_ref: ~/demo-setup/charts/gitops-operator
+    chart_ref: ~/demo-setup/charts/gitops-operator # CHANGEME
     values:
       namespaces:
         - janus-argocd

@@ -1,4 +1,5 @@
 ---
+# REMOVE
 - name: Setting up workload
   ansible.builtin.debug:
     msg: "Setting up GitLab"
@@ -153,6 +154,8 @@
     - "Devspaces: https://{{ ocp4_workload_redhat_developer_hub_devspaces_host }}"
     - "Devspaces user: {{ user_list }}"
     - "Devspaces password: {{ ocp4_workload_redhat_developer_hub_users_password }}"
+
+# REMOVE
 
 # Leave this as the last task in the playbook.
 # --------------------------------------------
