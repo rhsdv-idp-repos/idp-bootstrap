@@ -1,0 +1,82 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: create operator namespace
+  k8s:
+    state: present
+    kind: Namespace
+    name: "{{ operator_namespace }}"
+
+- name: create registry namespace
+  k8s:
+    state: present
+    kind: Namespace
+    name: "{{ registry_namespace }}"
+
+- name: wait until NooBaa is ready
+  kubernetes.core.k8s_info:
+    api_version: noobaa.io/v1alpha1
+    kind: NooBaa
+    name: noobaa
+    namespace: openshift-storage # CHANGEM make it a variable
+  register: r_noobaa
+  until: r_noobaa.resources.0.status.phase == "Ready"
+  retries: 120
+  delay: 10
+
+- name: retrieve NooBaa bucket class
+  k8s_info:
+    api_version: noobaa.io/v1alpha1
+    kind: BucketClass
+    namespace: openshift-storage
+  register: r_bucket_class
+
+- name: assert bucket class is present
+  assert:
+    that:
+      - r_bucket_class.resources | length == 1
+    fail_msg: Quay must be installed on a cluster with OpenShift Container Storage configured - and a Bucket Class deployed.
+
+- name: install operators and other resources
+  k8s:
+    state: present
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - openshift-quay-operator.yml.j2
+    - openshift-quay-bridge-operator.yml.j2
+    - openshift-quay-security-operator.yml.j2
+
+- name: get quay subscription info
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    namespace: "{{ operator_namespace }}"
+    name: "quay-operator" 
+  register: r_quay_subscription
+  retries: 30
+  delay: 10
+  until:
+    - r_quay_subscription.resources | length | int > 0
+    - r_quay_subscription.resources[0].status.currentCSV is defined
+
+- name: wait for operator to be ready
+  k8s_info:
+    api_version: v1
+    kind: Deployment
+    namespace: "{{ operator_namespace }}"
+    name: "{{ r_quay_subscription.resources[0].status.currentCSV }}"
+  register: r_quay_deployment
+  retries: 30
+  delay: 10
+  until:
+    - r_quay_deployment.resources | length | int > 0
+    - r_quay_deployment.resources[0].status.availableReplicas is defined
+    - r_quay_deployment.resources[0].status.availableReplicas | int == r_quay_deployment.resources[0].spec.replicas | int
+
+# Leave these as the last tasks in the playbook
+- name: install tasks complete
+  debug:
+    msg: "Install tasks completed successfully."
+  when:
+    - not silent|bool
+

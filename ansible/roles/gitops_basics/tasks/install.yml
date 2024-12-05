@@ -1,13 +1,13 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-- name: Create operator namespace
+- name: create operator namespace
   k8s:
     state: present
     kind: Namespace
     name: "{{ operator_namespace }}"
 
-- name: Install operators and other resources
+- name: install operators and other resources
   k8s:
     state: present
     definition: "{{ lookup('template', item ) | from_yaml }}"

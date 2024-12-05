@@ -1,0 +1,92 @@
+# Implement your post-install deployment tasks here
+# -------------------------------------------------
+
+- name: registry configuration
+  shell: |
+    oc create secret generic -n "{{ registry_namespace }}" --from-file config.yaml=../roles/quay_basics/templates/quay-config.yaml quay-init-config-bundle
+
+- name: create registry application
+  k8s:
+    state: present
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - quay-registry.yml.j2
+
+- name: wait for registry to be available
+  k8s_info:
+    api_version: quay.redhat.com/v1
+    kind: QuayRegistry
+    name: "{{ registry_name }}"
+    namespace: "{{ registry_namespace }}"
+  register: r_quay_registry
+  until:
+    - r_quay_registry.resources[0].status.currentVersion is defined
+    - r_quay_registry.resources[0].status.currentVersion | length > 0
+  retries: 30
+  delay: 10
+
+- name: get cluster base domain
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: Ingress
+    name: cluster
+  register: r_ingress_config
+
+- name: set registry route hostname
+  set_fact:
+    _quay_registry_route: "{{ registry_name }}-quay-{{ registry_namespace }}.{{ r_ingress_config.resources[0].spec.domain }}"
+
+- name: wait for API
+  uri:
+    url: "https://{{ _quay_registry_route }}/api/v1/discovery"
+    method: GET
+    validate_certs: false
+  register: r_quayapi
+  until: r_quayapi.status == 200 or r_quayapi.status == 403
+  retries: 120
+  delay: 10
+
+- name: create the admin user
+  uri:
+    url: "https://{{ _quay_registry_route }}/api/v1/user/initialize"
+    method: POST
+    body:
+      username: "{{ registry_superuser_username }}"
+      password: "{{ registry_superuser_password }}"
+      email: "{{ registry_superuser_email }}"
+      access_token: "true"
+    body_format: json
+    validate_certs: false
+    status_code: 200
+  register: r_quayadmin
+
+- name: save the admin access_token
+  when: r_quayadmin.status == 200
+  set_fact:
+    _quay_registry_admin_token: "{{ r_quayadmin.json.access_token }}"
+
+- name: create registry admin token secret
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'quay-admin-token-secret.yml.j2' ) | from_yaml }}"
+
+#- name: create vault secrets for registry access
+#  vars:
+#    quay_auth: "{{ ocp4_workload_quay_operator_superuser_username }}:{{ ocp4_workload_redhat_developer_hub_bootstrap_quay_admin_password }}"
+#  kubernetes.core.k8s_exec:
+#    namespace: "{{ ocp4_workload_redhat_developer_hub_bootstrap_vault_namespace }}"
+#    pod: vault-0
+#    command: "{{ item }}"
+#  loop:
+#    - "vault kv put kv/secrets/janusidp/registry/auth value={{ quay_auth | b64encode }}"
+#    - "vault kv put kv/secrets/janusidp/registry/username value={{ ocp4_workload_quay_operator_superuser_username }}"
+#    - "vault kv put kv/secrets/janusidp/registry/password value={{
+#      ocp4_workload_redhat_developer_hub_bootstrap_quay_admin_password }}"
+
+# Leave these as the last tasks in the playbook
+- name: post_install tasks complete
+  debug:
+    msg: "Post-Install tasks completed successfully."
+  when:
+    - not silent|bool
+
