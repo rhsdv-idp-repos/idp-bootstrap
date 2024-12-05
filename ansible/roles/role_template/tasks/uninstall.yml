@@ -1,0 +1,11 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+

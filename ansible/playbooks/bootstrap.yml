@@ -1,7 +1,0 @@
-- name: Configure the Software Factory services
-  hosts: localhost
-
-  roles:
-    - role: ../roles/redhat_developer_hub_bootstrap
-    - role: ../roles/redhat_developer_hub
-

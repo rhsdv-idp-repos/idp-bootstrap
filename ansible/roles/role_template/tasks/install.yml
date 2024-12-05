@@ -1,0 +1,11 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+
+# Leave these as the last tasks in the playbook
+- name: install tasks complete
+  debug:
+    msg: "Install tasks completed successfully."
+  when:
+    - not silent|bool
+
