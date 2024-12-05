@@ -1,0 +1,24 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: Create operator namespace
+  k8s:
+    state: present
+    kind: Namespace
+    name: "{{ operator_namespace }}"
+
+- name: Install operators and other resources
+  k8s:
+    state: present
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - openshift-gitops-operator.yml.j2
+    - openshift-pipeline-operator.yml.j2
+
+# Leave these as the last tasks in the playbook
+- name: install tasks complete
+  debug:
+    msg: "Install tasks completed successfully."
+  when:
+    - not silent|bool
+

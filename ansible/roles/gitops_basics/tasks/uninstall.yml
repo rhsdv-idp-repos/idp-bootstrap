@@ -1,0 +1,53 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: get pipelines subscription info
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    namespace: "{{ operator_namespace }}"
+    name: "openshift-pipelines-operator" 
+  register: r_pipeline_subscription
+
+- name: get gitops subscription info
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    namespace: "{{ operator_namespace }}"
+    name: "openshift-gitops-operator" 
+  register: r_gitops_subscription
+
+- name: remove subscriptions
+  k8s:
+    state: absent
+    kind: Subscription
+    api_version: operators.coreos.com/v1alpha1
+    namespace: "{{ operator_namespace }}"
+    name: "{{ item }}"
+  loop:
+    - "openshift-gitops-operator"
+    - "openshift-pipelines-operator"
+
+- name: remove gitops CSV
+  k8s:
+    state: absent
+    kind: ClusterServiceVersion
+    api_version: operators.coreos.com/v1alpha1
+    name: "{{ r_gitops_subscription.resources[0].status.currentCSV }}"
+    namespace: "{{ operator_namespace }}"
+  
+- name: remove pipelines CSV
+  k8s:
+    state: absent
+    kind: ClusterServiceVersion
+    api_version: operators.coreos.com/v1alpha1
+    name: "{{ r_pipeline_subscription.resources[0].status.currentCSV }}"
+    namespace: "{{ operator_namespace }}"
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+

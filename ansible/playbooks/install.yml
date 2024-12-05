@@ -7,4 +7,4 @@
     ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
   
   roles:
-    - role: ../roles/role_template
+    - role: ../roles/gitops_basics

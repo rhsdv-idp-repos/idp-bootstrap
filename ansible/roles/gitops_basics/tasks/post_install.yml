@@ -1,0 +1,36 @@
+# Implement your post-install deployment tasks here
+# -------------------------------------------------
+
+- name: wait for gitops operator to be ready
+  k8s_info:
+    kind: Deployment
+    namespace: "{{ operator_namespace }}"
+    name: "openshift-gitops-operator-controller-manager" 
+  register: r_operator_deployment
+  retries: 30
+  delay: 10
+  until:
+    - r_operator_deployment.resources | length | int > 0
+    - r_operator_deployment.resources[0].status.availableReplicas is defined
+    - r_operator_deployment.resources[0].status.availableReplicas | int == r_operator_deployment.resources[0].spec.replicas | int
+
+- name: wait for pipelines operator to be ready
+  k8s_info:
+    kind: Deployment
+    namespace: "{{ operator_namespace }}"
+    name: "openshift-pipelines-operator" 
+  register: r_operator_deployment
+  retries: 30
+  delay: 10
+  until:
+    - r_operator_deployment.resources | length | int > 0
+    - r_operator_deployment.resources[0].status.availableReplicas is defined
+    - r_operator_deployment.resources[0].status.availableReplicas | int == r_operator_deployment.resources[0].spec.replicas | int
+
+# Leave these as the last tasks in the playbook
+- name: post_install tasks complete
+  debug:
+    msg: "Post-Install tasks completed successfully."
+  when:
+    - not silent|bool
+
