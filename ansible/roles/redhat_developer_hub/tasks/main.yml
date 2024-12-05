@@ -53,9 +53,10 @@
   ansible.builtin.include_tasks:
     file: ./setup_backstage.yml
 
-- name: Setup Gitlab dependencies
-  ansible.builtin.include_tasks:
-    file: ./setup_gitlab_runner.yml
+# CHANGEME: fix the operator installation
+#- name: Setup Gitlab dependencies
+#  ansible.builtin.include_tasks:
+#    file: ./setup_gitlab_runner.yml
 
 - name: Setup Devspaces dependencies
   ansible.builtin.include_tasks:

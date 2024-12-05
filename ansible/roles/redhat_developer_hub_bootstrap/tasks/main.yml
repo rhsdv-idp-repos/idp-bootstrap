@@ -26,7 +26,8 @@
   ansible.builtin.include_tasks:
     file: ./setup_quay.yml
 
-- name: Setup Orchestrator
-  when: ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_enabled
-  ansible.builtin.include_tasks:
-    file: ./setup_orchestrator.yml
+# CHANGEME: fix the operator installation
+#- name: Setup Orchestrator
+#  when: ocp4_workload_redhat_developer_hub_bootstrap_orchestrator_enabled
+#  ansible.builtin.include_tasks:
+#    file: ./setup_orchestrator.yml
