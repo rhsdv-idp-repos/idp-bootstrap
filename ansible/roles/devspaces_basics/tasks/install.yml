@@ -1,0 +1,42 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+- name: create operator namespace
+  k8s:
+    state: present
+    kind: Namespace
+    name: "{{ operator_namespace }}"
+
+- name: create devspaces namespace
+  k8s:
+    state: present
+    kind: Namespace
+    name: "{{ devspaces_namespace }}"
+
+- name: install operators and other resources
+  k8s:
+    state: present
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - openshift-devspaces-operator.yml.j2
+
+- name: wait for operator to be ready
+  k8s_info:
+    api_version: v1
+    kind: Deployment
+    namespace: "{{ operator_namespace }}"
+    name: "{{ operator_deployment_name }}"
+  register: r_dev_deployment
+  retries: 30
+  delay: 10
+  until:
+    - r_dev_deployment.resources | length | int > 0
+    - r_dev_deployment.resources[0].status.availableReplicas is defined
+    - r_dev_deployment.resources[0].status.availableReplicas | int == r_dev_deployment.resources[0].spec.replicas | int
+
+# Leave these as the last tasks in the playbook
+- name: install tasks complete
+  debug:
+    msg: "Install tasks completed successfully."
+  when:
+    - not silent|bool
+

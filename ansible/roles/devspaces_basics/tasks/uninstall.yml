@@ -1,0 +1,72 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+- name: get subscription info 1
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    namespace: "{{ operator_namespace }}"
+    name: "{{ operator_subscription_name1 }}" 
+  register: r_dev_subscription1
+  ignore_errors: true
+
+- name: get subscription info 2
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    namespace: "{{ operator_namespace }}"
+    name: "{{ operator_subscription_name2 }}" 
+  register: r_dev_subscription2
+  ignore_errors: true
+
+- name: remove subscription 1
+  k8s:
+    state: absent
+    kind: Subscription
+    api_version: operators.coreos.com/v1alpha1
+    namespace: "{{ operator_namespace }}"
+    name: "{{ operator_subscription_name1 }}"
+  ignore_errors: true
+
+- name: remove subscription 2
+  k8s:
+    state: absent
+    kind: Subscription
+    api_version: operators.coreos.com/v1alpha1
+    namespace: "{{ operator_namespace }}"
+    name: "{{ operator_subscription_name2 }}"
+  ignore_errors: true
+
+- name: remove CSV 1
+  k8s:
+    state: absent
+    kind: ClusterServiceVersion
+    api_version: operators.coreos.com/v1alpha1
+    name: "{{ r_dev_subscription1.resources[0].status.currentCSV }}"
+    namespace: "{{ operator_namespace }}"
+  when: r_dev_subscription1.resources | length | int > 0
+  ignore_errors: true
+
+- name: remove CSV 2
+  k8s:
+    state: absent
+    kind: ClusterServiceVersion
+    api_version: operators.coreos.com/v1alpha1
+    name: "{{ r_dev_subscription2.resources[0].status.currentCSV }}"
+    namespace: "{{ operator_namespace }}"
+  when: r_dev_subscription2.resources | length | int > 0
+  ignore_errors: true
+
+- name: remove namespace
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ devspaces_namespace }}"
+  ignore_errors: true
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+
