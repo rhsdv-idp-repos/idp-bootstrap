@@ -1,9 +1,12 @@
-registry_superuser_username: "quayadmin"
-registry_superuser_password: "{{
-  common_password | default(lookup('password', '/dev/null chars=ascii_letters,digits '~ 'length=' ~ 10)) }}"
-registry_superuser_email: "quayadmin@example.com"
+---
+registry_superuser_username: quayadmin
+registry_superuser_password: admin321
+#registry_superuser_password: "{{
+#  default_password | default(lookup('password', '/dev/null chars=ascii_letters,digits '~ 'length=' ~ 10)) }}"
+registry_superuser_email: "admin@example.com"
 
-registry_name: "quay"
-registry_namespace: "registry"
+registry_name: "quay-registry"
+registry_namespace: "quay-enterprise"
 
+# defaults
 operator_namespace: "openshift-operators"

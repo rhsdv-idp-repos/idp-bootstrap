@@ -22,7 +22,7 @@
   until:
     - r_quay_registry.resources[0].status.currentVersion is defined
     - r_quay_registry.resources[0].status.currentVersion | length > 0
-  retries: 30
+  retries: 60
   delay: 10
 
 - name: get cluster base domain
@@ -65,10 +65,19 @@
   set_fact:
     _quay_registry_admin_token: "{{ r_quayadmin.json.access_token }}"
 
-- name: create registry admin token secret
+- name: create registry admin secrets
   k8s:
     state: present
-    definition: "{{ lookup('template', 'quay-admin-token-secret.yml.j2' ) | from_yaml }}"
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - quay-admin-token-secret.yml.j2
+    - quay-admin-password-secret.yml.j2
+    
+- name: print credentials
+  debug:
+    msg: "Credentials: {{ registry_superuser_username }} - {{ registry_superuser_password }} - {{ _quay_registry_admin_token }}"
+  when:
+    - not silent|bool
 
 #- name: create vault secrets for registry access
 #  vars:

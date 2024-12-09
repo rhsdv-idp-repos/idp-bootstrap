@@ -8,6 +8,7 @@
     namespace: "{{ operator_namespace }}"
     name: "openshift-pipelines-operator" 
   register: r_pipeline_subscription
+  ignore_errors: true
 
 - name: get gitops subscription info
   k8s_info:
@@ -16,6 +17,7 @@
     namespace: "{{ operator_namespace }}"
     name: "openshift-gitops-operator" 
   register: r_gitops_subscription
+  ignore_errors: true
 
 - name: remove subscriptions
   k8s:
@@ -27,6 +29,7 @@
   loop:
     - "openshift-gitops-operator"
     - "openshift-pipelines-operator"
+  ignore_errors: true
 
 - name: remove gitops CSV
   k8s:
@@ -35,6 +38,8 @@
     api_version: operators.coreos.com/v1alpha1
     name: "{{ r_gitops_subscription.resources[0].status.currentCSV }}"
     namespace: "{{ operator_namespace }}"
+  when: r_gitops_subscription.resources | length | int > 0
+  ignore_errors: true
   
 - name: remove pipelines CSV
   k8s:
@@ -43,6 +48,8 @@
     api_version: operators.coreos.com/v1alpha1
     name: "{{ r_pipeline_subscription.resources[0].status.currentCSV }}"
     namespace: "{{ operator_namespace }}"
+  when: r_pipeline_subscription.resources | length | int > 0
+  ignore_errors: true
 
 # Leave these as the last tasks in the playbook
 - name: uninstall tasks complete

@@ -1,6 +1,14 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
 
+- name: remove registry application
+  k8s:
+    state: absent
+    api_version: quay.redhat.com/v1
+    kind: QuayRegistry
+    name: "{{ registry_name }}"
+    namespace: "{{ registry_namespace }}"
+
 - name: get quay subscription info
   k8s_info:
     api_version: operators.coreos.com/v1alpha1
@@ -8,6 +16,7 @@
     namespace: "{{ operator_namespace }}"
     name: "quay-operator" 
   register: r_quay_subscription
+  ignore_errors: true
 
 - name: get quay-bridge subscription info
   k8s_info:
@@ -16,6 +25,7 @@
     namespace: "{{ operator_namespace }}"
     name: "quay-bridge-operator" 
   register: r_bridge_subscription
+  ignore_errors: true
 
 - name: get container security subscription info
   k8s_info:
@@ -24,6 +34,7 @@
     namespace: "{{ operator_namespace }}"
     name: "container-security-operator" 
   register: r_security_subscription
+  ignore_errors: true
 
 - name: remove subscriptions
   k8s:
@@ -36,6 +47,7 @@
     - "quay-operator" 
     - "quay-bridge-operator"
     - "container-security-operator"
+  ignore_errors: true
 
 - name: remove quay CSV
   k8s:
@@ -44,6 +56,8 @@
     api_version: operators.coreos.com/v1alpha1
     name: "{{ r_quay_subscription.resources[0].status.currentCSV }}"
     namespace: "{{ operator_namespace }}"
+  when: r_quay_subscription.resources | length | int > 0
+  ignore_errors: true
 
 - name: remove quay-bridge CSV
   k8s:
@@ -52,6 +66,8 @@
     api_version: operators.coreos.com/v1alpha1
     name: "{{ r_bridge_subscription.resources[0].status.currentCSV }}"
     namespace: "{{ operator_namespace }}"
+  when: r_bridge_subscription.resources | length | int > 0
+  ignore_errors: true
 
 - name: remove container security CSV
   k8s:
@@ -60,12 +76,15 @@
     api_version: operators.coreos.com/v1alpha1
     name: "{{ r_security_subscription.resources[0].status.currentCSV }}"
     namespace: "{{ operator_namespace }}"
+  when: r_security_subscription.resources | length | int > 0
+  ignore_errors: true
 
 - name: remove registry namespace
   k8s:
     state: absent
     kind: Namespace
     name: "{{ registry_namespace }}"
+  ignore_errors: true
 
 # Leave these as the last tasks in the playbook
 - name: uninstall tasks complete
