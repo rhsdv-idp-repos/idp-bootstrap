@@ -1,26 +1,23 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
-- name: uninstall devspaces operator
+- name: uninstall operator
   include_role:
     name: roles/install_operator
   vars:
-    operator_subscription_name: "devspaces"
-
-- name: uninstall devworkspace operator
-  include_role:
-    name: roles/install_operator
-  vars:
-    operator_subscription_name: "devworkspace-operator-fast-redhat-operators-openshift-marketplace"
-
-- name: remove webhook server
-  shell: "oc delete deployment devworkspace-webhook-server -n {{ operator_namespace }}"
-  ignore_errors: true
+    operator_subscription_name: "rhdh"
 
 - name: remove app namespace
   k8s:
     state: absent
     kind: Namespace
     name: "{{ app_namespace }}"
+  ignore_errors: true
+
+- name: remove operator namespace
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ operator_namespace }}"
   ignore_errors: true
 
 # Leave these as the last tasks in the playbook

@@ -3,9 +3,9 @@
 
 - name: registry configuration
   shell: |
-    oc create secret generic -n "{{ registry_namespace }}" --from-file config.yaml=../roles/quay_basics/templates/quay-config.yaml quay-init-config-bundle
+    oc create secret generic -n "{{ app_namespace }}" --from-file config.yaml=../roles/quay_basics/templates/quay-config.yaml quay-init-config-bundle
 
-- name: create registry application
+- name: create application
   k8s:
     state: present
     definition: "{{ lookup('template', item ) | from_yaml }}"
@@ -17,7 +17,7 @@
     api_version: quay.redhat.com/v1
     kind: QuayRegistry
     name: "{{ registry_name }}"
-    namespace: "{{ registry_namespace }}"
+    namespace: "{{ app_namespace }}"
   register: r_quay_registry
   until:
     - r_quay_registry.resources[0].status.currentVersion is defined
@@ -34,7 +34,7 @@
 
 - name: set registry route hostname
   set_fact:
-    _quay_registry_route: "{{ registry_name }}-quay-{{ registry_namespace }}.{{ r_ingress_config.resources[0].spec.domain }}"
+    _quay_registry_route: "{{ registry_name }}-quay-{{ app_namespace }}.{{ r_ingress_config.resources[0].spec.domain }}"
 
 - name: wait for API
   uri:

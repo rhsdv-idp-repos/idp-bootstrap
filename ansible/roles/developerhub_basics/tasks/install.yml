@@ -16,10 +16,10 @@
   include_role:
     name: roles/install_operator
   vars:
-    operator_name: "devspaces"
-    operator_subscription_name: "devspaces"
-    operator_deployment_name: "devspaces-operator"
-    subscription_channel: "stable"
+    operator_name: "rhdh"
+    operator_subscription_name: "rhdh"
+    operator_deployment_name: "rhdh-operator"
+    subscription_channel: "fast"
 
 # Leave these as the last tasks in the playbook
 - name: install tasks complete

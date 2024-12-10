@@ -1,0 +1,5 @@
+---
+app_namespace: "devhub"
+
+# defaults
+operator_namespace: "rhdh-operator"

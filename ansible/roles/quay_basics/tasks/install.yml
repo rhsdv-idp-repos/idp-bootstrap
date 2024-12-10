@@ -7,11 +7,11 @@
     kind: Namespace
     name: "{{ operator_namespace }}"
 
-- name: create registry namespace
+- name: create app namespace
   k8s:
     state: present
     kind: Namespace
-    name: "{{ registry_namespace }}"
+    name: "{{ app_namespace }}"
 
 - name: wait until NooBaa is ready
   kubernetes.core.k8s_info:

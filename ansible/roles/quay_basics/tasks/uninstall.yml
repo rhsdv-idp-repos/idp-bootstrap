@@ -1,13 +1,13 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
 
-- name: remove registry application
+- name: remove application
   k8s:
     state: absent
     api_version: quay.redhat.com/v1
     kind: QuayRegistry
     name: "{{ registry_name }}"
-    namespace: "{{ registry_namespace }}"
+    namespace: "{{ app_namespace }}"
 
 - name: uninstall quay operator
   include_role:
@@ -27,11 +27,11 @@
   vars:
     operator_subscription_name: "container-security-operator"
     
-- name: remove registry namespace
+- name: remove app namespace
   k8s:
     state: absent
     kind: Namespace
-    name: "{{ registry_namespace }}"
+    name: "{{ app_namespace }}"
   ignore_errors: true
 
 # Leave these as the last tasks in the playbook

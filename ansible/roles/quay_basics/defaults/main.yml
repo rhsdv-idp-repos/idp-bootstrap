@@ -6,7 +6,7 @@ registry_superuser_password: admin321
 registry_superuser_email: "admin@example.com"
 
 registry_name: "quay-registry"
-registry_namespace: "quay-enterprise"
+app_namespace: "quay-enterprise"
 
 # defaults
 operator_namespace: "openshift-operators"
