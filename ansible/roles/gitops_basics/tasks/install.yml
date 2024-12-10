@@ -7,13 +7,21 @@
     kind: Namespace
     name: "{{ operator_namespace }}"
 
-- name: install operators and other resources
-  k8s:
-    state: present
-    definition: "{{ lookup('template', item ) | from_yaml }}"
-  loop:
-    - openshift-gitops-operator.yml.j2
-    - openshift-pipeline-operator.yml.j2
+- name: install gitops operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_name: "openshift-gitops-operator"
+    operator_subscription_name: "openshift-gitops-operator"
+    operator_deployment_name: "openshift-gitops-operator-controller-manager"
+
+- name: install pipelines operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_name: "openshift-pipelines-operator-rh"
+    operator_subscription_name: "openshift-pipelines-operator"
+    operator_deployment_name: "openshift-pipelines-operator"
 
 # Leave these as the last tasks in the playbook
 - name: install tasks complete

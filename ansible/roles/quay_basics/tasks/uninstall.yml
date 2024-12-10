@@ -9,76 +9,24 @@
     name: "{{ registry_name }}"
     namespace: "{{ registry_namespace }}"
 
-- name: get quay subscription info
-  k8s_info:
-    api_version: operators.coreos.com/v1alpha1
-    kind: Subscription
-    namespace: "{{ operator_namespace }}"
-    name: "quay-operator" 
-  register: r_quay_subscription
-  ignore_errors: true
-
-- name: get quay-bridge subscription info
-  k8s_info:
-    api_version: operators.coreos.com/v1alpha1
-    kind: Subscription
-    namespace: "{{ operator_namespace }}"
-    name: "quay-bridge-operator" 
-  register: r_bridge_subscription
-  ignore_errors: true
-
-- name: get container security subscription info
-  k8s_info:
-    api_version: operators.coreos.com/v1alpha1
-    kind: Subscription
-    namespace: "{{ operator_namespace }}"
-    name: "container-security-operator" 
-  register: r_security_subscription
-  ignore_errors: true
-
-- name: remove subscriptions
-  k8s:
-    state: absent
-    kind: Subscription
-    api_version: operators.coreos.com/v1alpha1
-    namespace: "{{ operator_namespace }}"
-    name: "{{ item }}"
-  loop:
-    - "quay-operator" 
-    - "quay-bridge-operator"
-    - "container-security-operator"
-  ignore_errors: true
-
-- name: remove quay CSV
-  k8s:
-    state: absent
-    kind: ClusterServiceVersion
-    api_version: operators.coreos.com/v1alpha1
-    name: "{{ r_quay_subscription.resources[0].status.currentCSV }}"
-    namespace: "{{ operator_namespace }}"
-  when: r_quay_subscription.resources | length | int > 0
-  ignore_errors: true
-
-- name: remove quay-bridge CSV
-  k8s:
-    state: absent
-    kind: ClusterServiceVersion
-    api_version: operators.coreos.com/v1alpha1
-    name: "{{ r_bridge_subscription.resources[0].status.currentCSV }}"
-    namespace: "{{ operator_namespace }}"
-  when: r_bridge_subscription.resources | length | int > 0
-  ignore_errors: true
-
-- name: remove container security CSV
-  k8s:
-    state: absent
-    kind: ClusterServiceVersion
-    api_version: operators.coreos.com/v1alpha1
-    name: "{{ r_security_subscription.resources[0].status.currentCSV }}"
-    namespace: "{{ operator_namespace }}"
-  when: r_security_subscription.resources | length | int > 0
-  ignore_errors: true
-
+- name: uninstall quay operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "quay-operator"
+    
+- name: uninstall quay bridge operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "quay-bridge-operator"
+    
+- name: uninstall quay security operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "container-security-operator"
+    
 - name: remove registry namespace
   k8s:
     state: absent

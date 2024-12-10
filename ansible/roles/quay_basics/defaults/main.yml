@@ -8,5 +8,10 @@ registry_superuser_email: "admin@example.com"
 registry_name: "quay-registry"
 registry_namespace: "quay-enterprise"
 
+# operator stuff
+operator_subscription_name1: "quay-operator"
+operator_subscription_name2: "quay-bridge-operator"
+operator_subscription_name3: "container-security-operator"
+
 # defaults
 operator_namespace: "openshift-operators"

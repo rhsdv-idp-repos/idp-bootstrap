@@ -37,41 +37,29 @@
       - r_bucket_class.resources | length == 1
     fail_msg: Quay must be installed on a cluster with OpenShift Container Storage configured - and a Bucket Class deployed.
 
-- name: install operators and other resources
-  k8s:
-    state: present
-    definition: "{{ lookup('template', item ) | from_yaml }}"
-  loop:
-    - openshift-quay-operator.yml.j2
-    - openshift-quay-bridge-operator.yml.j2
-    - openshift-quay-security-operator.yml.j2
+- name: install quay operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_name: "quay-operator"
+    operator_subscription_name: "quay-operator"
+    subscription_channel: "stable-3.13"
 
-- name: get quay subscription info
-  k8s_info:
-    api_version: operators.coreos.com/v1alpha1
-    kind: Subscription
-    namespace: "{{ operator_namespace }}"
-    name: "quay-operator" 
-  register: r_quay_subscription
-  retries: 30
-  delay: 10
-  until:
-    - r_quay_subscription.resources | length | int > 0
-    - r_quay_subscription.resources[0].status.currentCSV is defined
+- name: install quay bridge operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_name: "quay-bridge-operator"
+    operator_subscription_name: "quay-bridge-operator"
+    subscription_channel: "stable-3.13"
 
-- name: wait for operator to be ready
-  k8s_info:
-    api_version: v1
-    kind: Deployment
-    namespace: "{{ operator_namespace }}"
-    name: "{{ r_quay_subscription.resources[0].status.currentCSV }}"
-  register: r_quay_deployment
-  retries: 30
-  delay: 10
-  until:
-    - r_quay_deployment.resources | length | int > 0
-    - r_quay_deployment.resources[0].status.availableReplicas is defined
-    - r_quay_deployment.resources[0].status.availableReplicas | int == r_quay_deployment.resources[0].spec.replicas | int
+- name: install quay security operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_name: "container-security-operator"
+    operator_subscription_name: "container-security-operator"
+    subscription_channel: "stable-3.13"
 
 # Leave these as the last tasks in the playbook
 - name: install tasks complete

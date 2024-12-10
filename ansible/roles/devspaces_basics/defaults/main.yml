@@ -3,6 +3,7 @@ devspaces_namespace: "devspaces"
 
 # operator stuff
 operator_deployment_name: "devspaces-operator"
+
 operator_subscription_name1: "devspaces"
 operator_subscription_name2: "devworkspace-operator-fast-redhat-operators-openshift-marketplace"
 

@@ -1,0 +1,39 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+- name: get subscription info
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    namespace: "{{ operator_namespace }}"
+    name: "{{ operator_subscription_name }}" 
+  register: r_subscription
+  ignore_errors: true
+
+- name: remove subscriptions
+  k8s:
+    state: absent
+    kind: Subscription
+    api_version: operators.coreos.com/v1alpha1
+    namespace: "{{ operator_namespace }}"
+    name: "{{ item }}"
+  loop:
+    - "{{ operator_subscription_name }}"
+  ignore_errors: true
+
+- name: remove CSV
+  k8s:
+    state: absent
+    kind: ClusterServiceVersion
+    api_version: operators.coreos.com/v1alpha1
+    name: "{{ r_subscription.resources[0].status.currentCSV }}"
+    namespace: "{{ operator_namespace }}"
+  when: r_subscription.resources | length | int > 0
+  ignore_errors: true
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall operator tasks completed successfully."
+  when:
+    - not silent|bool
+
