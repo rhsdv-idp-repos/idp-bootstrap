@@ -1,59 +1,19 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
-- name: get subscription info 1
-  k8s_info:
-    api_version: operators.coreos.com/v1alpha1
-    kind: Subscription
-    namespace: "{{ operator_namespace }}"
-    name: "{{ operator_subscription_name1 }}" 
-  register: r_subscription1
-  ignore_errors: true
+- name: uninstall devspaces operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "devspaces"
 
-- name: get subscription info 2
-  k8s_info:
-    api_version: operators.coreos.com/v1alpha1
-    kind: Subscription
-    namespace: "{{ operator_namespace }}"
-    name: "{{ operator_subscription_name2 }}" 
-  register: r_subscription2
-  ignore_errors: true
+- name: uninstall devworkspace operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "devworkspace-operator-fast-redhat-operators-openshift-marketplace"
 
-- name: remove subscription 1
-  k8s:
-    state: absent
-    kind: Subscription
-    api_version: operators.coreos.com/v1alpha1
-    namespace: "{{ operator_namespace }}"
-    name: "{{ operator_subscription_name1 }}"
-  ignore_errors: true
-
-- name: remove subscription 2
-  k8s:
-    state: absent
-    kind: Subscription
-    api_version: operators.coreos.com/v1alpha1
-    namespace: "{{ operator_namespace }}"
-    name: "{{ operator_subscription_name2 }}"
-  ignore_errors: true
-
-- name: remove CSV 1
-  k8s:
-    state: absent
-    kind: ClusterServiceVersion
-    api_version: operators.coreos.com/v1alpha1
-    name: "{{ r_subscription1.resources[0].status.currentCSV }}"
-    namespace: "{{ operator_namespace }}"
-  when: r_subscription1.resources | length | int > 0
-  ignore_errors: true
-
-- name: remove CSV 2
-  k8s:
-    state: absent
-    kind: ClusterServiceVersion
-    api_version: operators.coreos.com/v1alpha1
-    name: "{{ r_subscription2.resources[0].status.currentCSV }}"
-    namespace: "{{ operator_namespace }}"
-  when: r_subscription2.resources | length | int > 0
+- name: remove webhook server
+  shell: "oc delete deployment devworkspace-webhook-server -n {{ operator_namespace }}"
   ignore_errors: true
 
 - name: remove namespace

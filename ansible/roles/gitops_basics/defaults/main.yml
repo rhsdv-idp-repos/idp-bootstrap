@@ -1,10 +1,3 @@
 ---
-# operator stuff
-operator_deployment_name1: "openshift-gitops-operator-controller-manager"
-operator_deployment_name2: "openshift-pipelines-operator"
-
-operator_subscription_name1: "openshift-pipelines-operator"
-operator_subscription_name2: "openshift-gitops-operator"
-
 # defaults
 operator_namespace: "openshift-operators"

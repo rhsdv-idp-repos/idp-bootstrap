@@ -7,6 +7,6 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
 
   roles:
-    #- role: ../roles/devspaces_basics
+    - role: ../roles/devspaces_basics
     - role: ../roles/quay_basics
-    #- role: ../roles/gitops_basics
+    - role: ../roles/gitops_basics
