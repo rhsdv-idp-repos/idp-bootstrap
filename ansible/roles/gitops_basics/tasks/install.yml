@@ -1,5 +1,8 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
+- name: running install tasks
+  debug:
+    msg: "Running installation tasks for {{ role_name }}"
 
 - name: create operator namespace
   k8s:

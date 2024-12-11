@@ -6,8 +6,20 @@
     become_override: false
     ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
   
-  roles:
-    #- role: ../roles/gitops_basics
-    #- role: ../roles/quay_basics
-    #- role: ../roles/devspaces_basics
-    - role: ../roles/developerhub_basics
+  tasks:
+    - name: Install all gitops and pipeline services
+      include_role:
+        name: ../roles/gitops_basics
+      when: install_gitops
+
+    - name: Install quay and related services
+      include_role:
+        name: ../roles/quay_basics
+      when: install_quay
+
+
+  #roles:
+  #  - role: ../roles/gitops_basics
+  #  - role: ../roles/quay_basics
+  #  - role: ../roles/devspaces_basics
+  #  - role: ../roles/developerhub_basics

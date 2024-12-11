@@ -1,4 +1,10 @@
 all:
   vars:
-    default_password: "admin321"
+    # set the following to control the install/uninstall proces
+    install_gitops: true
+    install_devspaces: true
+    install_devhub: true
+    install_quay: true
 
+    # other defaults
+    default_password: "admin321"
