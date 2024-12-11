@@ -1,4 +1,5 @@
 ---
+instance_name: "developer-hub"
 app_namespace: "devhub"
 
 # defaults

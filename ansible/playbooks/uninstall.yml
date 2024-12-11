@@ -7,6 +7,11 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
+    - name: Install OpenShift Developer Hub and related services
+      include_role:
+        name: ../roles/install_developer_hub
+      when: install_developer_hub
+
     - name: Un-Install OpenShift Dev Spaces and related services
       include_role:
         name: ../roles/install_devspaces
@@ -21,11 +26,3 @@
       include_role:
         name: ../roles/install_devops
       when: install_devops
-
-    
-      
-  #roles:
-  #  - role: ../roles/developerhub_basics
-  #  - role: ../roles/devspaces_basics
-  #  - role: ../roles/quay_basics
-  #  - role: ../roles/gitops_basics

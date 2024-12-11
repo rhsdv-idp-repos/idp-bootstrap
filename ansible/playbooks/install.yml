@@ -22,8 +22,7 @@
         name: ../roles/install_devspaces
       when: install_devspaces
 
-  #roles:
-  #  - role: ../roles/gitops_basics
-  #  - role: ../roles/quay_basics
-  #  - role: ../roles/devspaces_basics
-  #  - role: ../roles/developerhub_basics
+    - name: Install OpenShift Developer Hub and related services
+      include_role:
+        name: ../roles/install_developer_hub
+      when: install_developer_hub

@@ -1,5 +1,14 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
+- name: remove application instance
+  k8s:
+    state: absent
+    kind: Backstage
+    name: "{{ instance_name }}"
+    api_version: rhdh.redhat.com/v1alpha2
+    namespace: "{{ app_namespace }}"
+  ignore_errors: true
+
 - name: uninstall operator
   include_role:
     name: roles/install_operator
