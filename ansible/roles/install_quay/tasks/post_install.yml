@@ -3,7 +3,7 @@
 
 - name: registry configuration
   shell: |
-    oc create secret generic -n "{{ app_namespace }}" --from-file config.yaml=../roles/quay_basics/templates/quay-config.yaml quay-init-config-bundle
+    oc create secret generic -n "{{ app_namespace }}" --from-file config.yaml=../roles/install_quay/templates/quay-config.yaml quay-init-config-bundle
 
 - name: create application
   k8s:

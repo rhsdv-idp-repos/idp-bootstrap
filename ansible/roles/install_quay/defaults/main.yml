@@ -1,9 +1,10 @@
 ---
 registry_superuser_username: quayadmin
-registry_superuser_password: admin321
+registry_superuser_password: "{{ default_password }}"
+registry_superuser_email: "admin@example.com"
+
 #registry_superuser_password: "{{
 #  default_password | default(lookup('password', '/dev/null chars=ascii_letters,digits '~ 'length=' ~ 10)) }}"
-registry_superuser_email: "admin@example.com"
 
 registry_name: "quay-registry"
 app_namespace: "quay-enterprise"

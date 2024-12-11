@@ -7,15 +7,22 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
-    - name: Install all gitops and pipeline services
+    - name: Un-Install OpenShift Dev Spaces and related services
       include_role:
-        name: ../roles/gitops_basics
-      when: install_gitops
+        name: ../roles/install_devspaces
+      when: install_devspaces
 
-    - name: Install quay and related services
+    - name: Un-Install Red Hat Quay and related services
       include_role:
-        name: ../roles/quay_basics
+        name: ../roles/install_quay
       when: install_quay
+
+    - name: Un-Install all DevOps services
+      include_role:
+        name: ../roles/install_devops
+      when: install_devops
+
+    
       
   #roles:
   #  - role: ../roles/developerhub_basics
