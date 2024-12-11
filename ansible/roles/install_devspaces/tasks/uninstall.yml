@@ -4,6 +4,15 @@
   debug:
     msg: "Running uninstallation tasks for {{ role_name }}"
 
+- name: remove application instance
+  k8s:
+    state: absent
+    kind: CheCluster
+    name: "{{ instance_name }}"
+    api_version: org.eclipse.che/v2
+    namespace: "{{ app_namespace }}"
+  ignore_errors: true
+
 - name: uninstall devspaces operator
   include_role:
     name: roles/install_operator
