@@ -73,12 +73,6 @@
     - quay-admin-token-secret.yml.j2
     - quay-admin-password-secret.yml.j2
     
-- name: print credentials
-  debug:
-    msg: "Credentials: {{ registry_superuser_username }} - {{ registry_superuser_password }} - {{ _quay_registry_admin_token }}"
-  when:
-    - not silent|bool
-
 #- name: create vault secrets for registry access
 #  vars:
 #    quay_auth: "{{ ocp4_workload_quay_operator_superuser_username }}:{{ ocp4_workload_redhat_developer_hub_bootstrap_quay_admin_password }}"

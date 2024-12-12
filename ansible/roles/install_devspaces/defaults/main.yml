@@ -1,6 +1,6 @@
 ---
 instance_name: "devspaces"
-app_namespace: "devspaces"
+app_namespace: "{{ idp_prefix }}-devspaces"
 
 # Dev Spaces application defaults
 dashboard_description: "Automotive Software Factory"

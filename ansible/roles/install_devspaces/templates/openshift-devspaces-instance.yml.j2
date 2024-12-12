@@ -44,14 +44,14 @@ spec:
       - container:
           sourceMapping: /projects
           image: {{ default_workspace_container_image }}
-          cpuRequest: {{ cpu_requested }}
-          memoryRequest: {{ memory_requested }}
-          cpuLimit: {{ cpu_limit }} 
-          memoryLimit: {{ memory_limit }}
+          cpuRequest: "{{ cpu_requested }}"
+          memoryRequest: "{{ memory_requested }}"
+          cpuLimit: "{{ cpu_limit }}"
+          memoryLimit: "{{ memory_limit }}"
         name: universal-developer-image
     defaultNamespace:
       autoProvision: true
-      template: <username>-devspaces
+      template: <username>-{{ idp_prefix }}-devspaces
     secondsOfInactivityBeforeIdling: 1800
     storage:
       pvcStrategy: per-user
