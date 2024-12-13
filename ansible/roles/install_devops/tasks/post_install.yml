@@ -1,6 +1,20 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
+- name: create infrastructure namespace
+  k8s:
+    state: present
+    kind: Namespace
+    name: "{{ infrastructure_namespace }}"
+
+- name: create bootstrap application
+  k8s:
+    state: present
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - bootstrap-app-project.yml.j2
+    - bootstrap-app.yml.j2
+
 # Leave these as the last tasks in the playbook
 - name: post_install tasks complete
   debug:

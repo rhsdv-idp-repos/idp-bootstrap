@@ -1,3 +1,5 @@
 ---
+infrastructure_namespace: "{{ idp_prefix }}-infrastructure"
+
 # defaults
 operator_namespace: "openshift-operators"

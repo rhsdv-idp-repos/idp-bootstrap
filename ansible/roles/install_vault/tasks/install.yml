@@ -1,0 +1,19 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+- name: running install tasks
+  debug:
+    msg: "Running installation tasks for {{ role_name }}"
+
+- name: create application
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'application-vault.yml.j2') | from_yaml }}"
+
+
+# Leave these as the last tasks in the playbook
+- name: install tasks complete
+  debug:
+    msg: "Install tasks completed successfully."
+  when:
+    - not silent|bool
+

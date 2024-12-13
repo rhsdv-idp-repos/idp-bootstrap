@@ -22,6 +22,11 @@
         name: ../roles/install_quay
       when: install_quay
 
+    - name: Un-Install Hashicorp Vault related services
+      include_role:
+        name: ../roles/install_vault
+      when: install_vault
+
     - name: Un-Install all DevOps services
       include_role:
         name: ../roles/install_devops

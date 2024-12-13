@@ -4,6 +4,22 @@
   debug:
     msg: "Running uninstallation tasks for {{ role_name }}"
 
+- name: remove app project
+  k8s:
+    state: absent
+    kind: AppProject
+    api_version: argoproj.io/v1alpha1
+    name: "{{ idp_prefix }}-bootstrap"
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
+- name: remove infrastructure namespace
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ infrastructure_namespace }}"
+  ignore_errors: true
+
 - name: uninstall gitops operator
   include_role:
     name: roles/install_operator
