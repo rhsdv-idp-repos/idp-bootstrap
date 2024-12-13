@@ -3,7 +3,7 @@ all:
     # set the following to control the install/uninstall proces
     
     # basic developer services, SHOULD be installed by default
-    install_devops: false #true      # Openshift GitOps / Pipelines
+    install_devops: true #true      # Openshift GitOps / Pipelines
     install_vault: true #true      # Hashicorp Vault
     install_quay: false #true        # Quay.io
     install_devspaces: false #true   # Red Hat OpenShift Dev Spaces

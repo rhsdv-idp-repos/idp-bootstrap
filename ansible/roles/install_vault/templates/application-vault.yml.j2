@@ -5,7 +5,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: {{ idp_prefix }}-infrastructure
+    namespace: {{ idp_prefix }}-vault
     server: 'https://kubernetes.default.svc'
   project: "{{ idp_prefix }}-bootstrap"
   source:

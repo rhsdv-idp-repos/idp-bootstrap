@@ -1,4 +1,4 @@
 ---
 vault:
-  namespace: "idp-infrastructure"
+  namespace: "idp-vault"
   channel: 'stable-4.10'

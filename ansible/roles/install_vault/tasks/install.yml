@@ -9,7 +9,6 @@
     state: present
     definition: "{{ lookup('template', 'application-vault.yml.j2') | from_yaml }}"
 
-
 # Leave these as the last tasks in the playbook
 - name: install tasks complete
   debug:
