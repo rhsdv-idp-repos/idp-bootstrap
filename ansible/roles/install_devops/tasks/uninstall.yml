@@ -4,6 +4,15 @@
   debug:
     msg: "Running uninstallation tasks for {{ role_name }}"
 
+- name: remove app
+  k8s:
+    state: absent
+    kind: Application
+    api_version: argoproj.io/v1alpha1
+    name: "{{ idp_prefix }}-bootstrap"
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
 - name: remove app project
   k8s:
     state: absent
@@ -11,13 +20,6 @@
     api_version: argoproj.io/v1alpha1
     name: "{{ idp_prefix }}-bootstrap"
     namespace: "openshift-gitops"
-  ignore_errors: true
-
-- name: remove infrastructure namespace
-  k8s:
-    state: absent
-    kind: Namespace
-    name: "{{ infrastructure_namespace }}"
   ignore_errors: true
 
 - name: uninstall gitops operator

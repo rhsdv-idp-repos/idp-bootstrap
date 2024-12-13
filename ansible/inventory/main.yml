@@ -3,8 +3,8 @@ all:
     # set the following to control the install/uninstall proces
     
     # basic developer services, SHOULD be installed by default
-    install_devops: true #true      # Openshift GitOps / Pipelines
-    install_vault: false #true      # Hashicorp Vault
+    install_devops: false #true      # Openshift GitOps / Pipelines
+    install_vault: true #true      # Hashicorp Vault
     install_quay: false #true        # Quay.io
     install_devspaces: false #true   # Red Hat OpenShift Dev Spaces
 
@@ -17,10 +17,10 @@ all:
     idp_prefix: "idp"             # used in e.g. namespace creation
 
     # default repo for all the GitOps apps
-    idp_bootstrap_git_repo_url: "https://gitlab.com/rhsdv-partner-collab/idp-bootstrap"
+    idp_bootstrap_git_repo_url: "https://github.com/rhsdv-idp-repos/idp-bootstrap"
     idp_bootstrap_git_repo_revision: "develop"
 
     # default repo for all the Helm Charts
-    idp_bootstrap_helm_repo_url: "https://github.com/redhat-gpte-devopsautomation/agnosticg"
-    idp_bootstrap_helm_repo_revision: "main"
+    idp_bootstrap_helm_repo_url: "https://github.com/rhsdv-idp-repos/idp-bootstrap" # "https://github.com/redhat-gpte-devopsautomation/agnosticg"
+    idp_bootstrap_helm_repo_revision: "develop"
     

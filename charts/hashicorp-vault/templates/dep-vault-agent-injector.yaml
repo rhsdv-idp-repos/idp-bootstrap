@@ -4,7 +4,7 @@ metadata:
   labels:
     component: webhook
   name: vault-agent-injector
-  namespace: vault
+  namespace: "{{ $.Values.vault.namespace }}"
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
