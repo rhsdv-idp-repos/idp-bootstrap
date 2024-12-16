@@ -13,7 +13,7 @@
     file: ./install.yml
     apply:
       become: "{{ become_override | bool }}"
-  when: ACTION == "INSTALL" or ACTION == "UPDATE"
+  when: ACTION == "INSTALL" #or ACTION == "UPDATE"
 
 - name: running post install tasks
   include_tasks:
