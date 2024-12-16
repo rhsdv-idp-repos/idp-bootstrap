@@ -10,8 +10,8 @@ spec:
   destinations:
     #- namespace: "*"
     #  server: "*"
-    #- namespace: "idp-infrastructure"
-    #  server: "*"
+    - namespace: "idp-infrastructure"
+      server: "*"
     - namespace: "idp-vault"
       server: "*"
     #- namespace: "idp-quay"
