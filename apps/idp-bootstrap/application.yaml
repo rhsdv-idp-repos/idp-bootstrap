@@ -15,8 +15,8 @@ spec:
     directory:
       recurse: false
     path: apps/idp-infrastructure
-    repoURL: {{ idp_bootstrap_git_repo_url }}
-    targetRevision: {{ idp_bootstrap_git_repo_revision }}
+    repoURL: "https://github.com/rhsdv-idp-repos/idp-bootstrap"
+    targetRevision: "develop"
   destination:
     namespace: "{{ idp_prefix }}-infrastructure"
     server: https://kubernetes.default.svc
