@@ -8,7 +8,7 @@ spec:
     - group: "*"
       kind: "*"
   destinations:
-    - namespace: "{{ infrastructure_namespace }}"
+    - namespace: "{{ idp_prefix }}-infrastructure"
       server: "*"
   sourceRepos:
     - "*"

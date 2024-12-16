@@ -1,7 +1,7 @@
 kind: Application
 apiVersion: argoproj.io/v1alpha1
 metadata:
-  name: "{{ idp_prefix }}-infrastructure"
+  name: "{{ idp_prefix }}-bootstrap"
   namespace: "openshift-gitops"
 spec:
   project: "{{ idp_prefix }}-bootstrap"
@@ -14,7 +14,7 @@ spec:
   source:
     directory:
       recurse: false
-    path: apps/idp-infrastructure
+    path: apps/idp-bootstrap
     repoURL: {{ idp_bootstrap_git_repo_url }}
     targetRevision: {{ idp_bootstrap_git_repo_revision }}
   destination:
