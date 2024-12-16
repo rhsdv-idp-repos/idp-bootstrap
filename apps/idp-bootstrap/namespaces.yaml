@@ -17,3 +17,33 @@ metadata:
 spec:
   finalizers:
     - kubernetes
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: idp-quay
+  labels:
+    argocd.argoproj.io/managed-by: openshift-gitops
+spec:
+  finalizers:
+    - kubernetes
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: idp-devspaces
+  labels:
+    argocd.argoproj.io/managed-by: openshift-gitops
+spec:
+  finalizers:
+    - kubernetes
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: idp-developer-hub
+  labels:
+    argocd.argoproj.io/managed-by: openshift-gitops
+spec:
+  finalizers:
+    - kubernetes
