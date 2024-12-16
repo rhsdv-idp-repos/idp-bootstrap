@@ -23,5 +23,5 @@ roleRef:
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: idp-gitops-argocd-application-controller
-    namespace: idp-infrastructure
+    name: openshift-gitops-argocd-application-controller
+    namespace: openshift-gitops
