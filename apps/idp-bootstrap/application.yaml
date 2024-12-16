@@ -1,0 +1,22 @@
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: "idp-infrastructure"
+  namespace: "idp-infrastructure"
+spec:
+  project: "idp-infrastructure"
+  namespace: "idp-infrastructure"
+  revisionHistoryLimit: 3
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    directory:
+      recurse: false
+    path: apps/idp-infrastructure
+    repoURL: {{ idp_bootstrap_git_repo_url }}
+    targetRevision: {{ idp_bootstrap_git_repo_revision }}
+  destination:
+    namespace: "{{ idp_prefix }}-infrastructure"
+    server: https://kubernetes.default.svc
