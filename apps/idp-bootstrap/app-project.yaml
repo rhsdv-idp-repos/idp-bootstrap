@@ -20,4 +20,4 @@ spec:
       server: "*"
   sourceRepos:
     - "*"
-status: {}
+
