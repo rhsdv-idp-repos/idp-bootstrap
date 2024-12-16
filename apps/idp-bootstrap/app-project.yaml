@@ -8,6 +8,8 @@ spec:
     - group: "*"
       kind: "*"
   destinations:
+    - namespace: "idp-infrastructure"
+      server: "*"
     - namespace: "idp-vault"
       server: "*"
     - namespace: "idp-quay"
