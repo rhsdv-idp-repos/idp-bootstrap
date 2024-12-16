@@ -18,5 +18,5 @@ spec:
     repoURL: "https://github.com/rhsdv-idp-repos/idp-bootstrap"
     targetRevision: "develop"
   destination:
-    namespace: "{{ idp_prefix }}-infrastructure"
+    namespace: "idp-infrastructure"
     server: https://kubernetes.default.svc
