@@ -5,7 +5,7 @@ metadata:
   namespace: "idp-infrastructure"
 spec:
   project: "idp-infrastructure"
-  namespace: "idp-infrastructure"
+  #namespace: "idp-infrastructure"
   revisionHistoryLimit: 3
   syncPolicy:
     automated:
@@ -14,8 +14,8 @@ spec:
     syncOptions:
       - CreateNamespace=true
   source:
-    directory:
-      recurse: false
+    #directory:
+    #  recurse: false
     path: apps/idp-infrastructure
     repoURL: "https://github.com/rhsdv-idp-repos/idp-bootstrap"
     targetRevision: "develop"
