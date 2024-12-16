@@ -1,13 +1,13 @@
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: idp-vault
-  labels:
-    argocd.argoproj.io/managed-by: idp-gitops
-spec:
-  finalizers:
-    - kubernetes
----
+#kind: Namespace
+#apiVersion: v1
+#metadata:
+#  name: idp-vault
+#  labels:
+#    argocd.argoproj.io/managed-by: idp-gitops
+#spec:
+#  finalizers:
+#    - kubernetes
+#---
 kind: Namespace
 apiVersion: v1
 metadata:
