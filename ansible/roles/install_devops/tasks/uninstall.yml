@@ -4,14 +4,14 @@
   debug:
     msg: "Running uninstallation tasks for {{ role_name }}"
 
-- name: remove infrastructure app project
-  k8s:
-    state: absent
-    kind: AppProject
-    api_version: argoproj.io/v1alpha1
-    name: "{{ idp_prefix }}-infrastructure"
-    namespace: "{{ idp_prefix }}-infrastructure"
-  ignore_errors: true
+#- name: remove infrastructure app project
+#  k8s:
+#    state: absent
+#    kind: AppProject
+#    api_version: argoproj.io/v1alpha1
+#    name: "{{ idp_prefix }}-infrastructure"
+#    namespace: "{{ idp_prefix }}-infrastructure"
+#  ignore_errors: true
 
 - name: remove default infrastructure app project
   k8s:
@@ -36,7 +36,7 @@
     state: absent
     kind: Application
     api_version: argoproj.io/v1alpha1
-    name: "{{ idp_prefix }}-infrastructure"
+    name: "{{ idp_prefix }}-bootstrap"
     namespace: "openshift-gitops"
   ignore_errors: true
 

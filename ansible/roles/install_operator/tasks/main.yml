@@ -6,7 +6,6 @@
 # - silent
 # - become_override
 
-  
 - name: running install tasks
   include_tasks:
     file: ./install.yml

@@ -1,0 +1,33 @@
+- name: Install all Software Factory services
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+    ACTION: "UPDATE" # INSTALL, UNINSTALL, UPDATE
+  
+  tasks:
+    - name: Install all DevOps services
+      include_role:
+        name: ../roles/install_devops
+      when: install_devops
+
+    - name: Install Hashicorp Vault related services
+      include_role:
+        name: ../roles/install_vault
+      when: install_vault
+
+    - name: Install Red Hat Quay and related services
+      include_role:
+        name: ../roles/install_quay
+      when: install_quay
+
+    - name: Install OpenShift Dev Spaces and related services
+      include_role:
+        name: ../roles/install_devspaces
+      when: install_devspaces
+
+    - name: Install OpenShift Developer Hub and related services
+      include_role:
+        name: ../roles/install_developer_hub
+      when: install_developer_hub
