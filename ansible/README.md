@@ -12,5 +12,3 @@ pip install ansible kubernetes openshift hvac PyYAML
 ```shell
 ansible-galaxy collection install kubernetes.core community.hashi_vault
 ```
-
-

@@ -1,0 +1,22 @@
+kind: AppProject
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: "{{ idp_prefix }}-bootstrap"
+  namespace: "openshift-gitops"
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: "{{ idp_prefix }}-infrastructure"
+      server: "*"
+    - namespace: "{{ idp_prefix }}-vault"
+      server: "*"
+    - namespace: "{{ idp_prefix }}-quay"
+      server: "*"
+    - namespace: "{{ idp_prefix }}-devspaces"
+      server: "*"
+    - namespace: "{{ idp_prefix }}-developer-hub"
+      server: "*"
+  sourceRepos:
+    - "*"

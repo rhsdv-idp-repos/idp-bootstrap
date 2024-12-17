@@ -1,0 +1,45 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+- name: running uninstall tasks
+  debug:
+    msg: "Running uninstallation tasks for {{ role_name }}"
+
+- name: remove application instance
+  k8s:
+    state: absent
+    kind: CheCluster
+    name: "{{ instance_name }}"
+    api_version: org.eclipse.che/v2
+    namespace: "{{ app_namespace }}"
+  ignore_errors: true
+
+- name: uninstall devspaces operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "devspaces"
+
+- name: uninstall devworkspace operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "devworkspace-operator-fast-redhat-operators-openshift-marketplace"
+
+- name: remove webhook server
+  shell: "oc delete deployment devworkspace-webhook-server -n {{ operator_namespace }}"
+  ignore_errors: true
+
+- name: remove app namespace
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ app_namespace }}"
+  ignore_errors: true
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+

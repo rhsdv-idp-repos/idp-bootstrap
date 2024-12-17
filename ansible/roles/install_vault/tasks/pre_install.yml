@@ -1,0 +1,10 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+# Leave these as the last tasks in the playbook
+- name: pre_install tasks complete
+  debug:
+    msg: "Pre-Install tasks completed successfully."
+  when:
+    - not silent|bool
+

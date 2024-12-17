@@ -1,5 +1,0 @@
----
-app_namespace: "devspaces"
-
-# defaults
-operator_namespace: "openshift-operators"

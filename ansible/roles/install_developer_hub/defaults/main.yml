@@ -1,0 +1,6 @@
+---
+instance_name: "developer-hub"
+app_namespace: "{{ idp_prefix }}-developer-hub"
+
+# defaults
+operator_namespace: "openshift-operators"

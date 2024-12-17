@@ -1,0 +1,18 @@
+---
+instance_name: "devspaces"
+app_namespace: "{{ idp_prefix }}-devspaces"
+
+# Dev Spaces application defaults
+dashboard_description: "Automotive Software Factory"
+workspaces_per_user: -1   # -1 means unlimited
+running_workspaces_per_user: 1  # n workspace per user
+default_workspace_container_image: "registry.redhat.io/devspaces/udi-rhel8:3.11"
+
+# Dev Spaces user defaults
+cpu_requested: "1"  # n cores requested 
+cpu_limit: "2" # maximum cores allowed
+memory_requested: "1Gi" # n Gi requested
+memory_limit: "4Gi" # maximum Gi allowed
+
+# defaults
+operator_namespace: "openshift-operators"

@@ -4,7 +4,7 @@
     # set the following to control the install/uninstall process
     silent: false
     become_override: false
-    ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
+    ACTION: "UPDATE" # INSTALL, UNINSTALL, UPDATE
   
   tasks:
     - name: Install all DevOps services

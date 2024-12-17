@@ -1,0 +1,38 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+- name: remove application instance
+  k8s:
+    state: absent
+    kind: Backstage
+    name: "{{ instance_name }}"
+    api_version: rhdh.redhat.com/v1alpha2
+    namespace: "{{ app_namespace }}"
+  ignore_errors: true
+
+- name: uninstall operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "rhdh"
+
+- name: remove app namespace
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ app_namespace }}"
+  ignore_errors: true
+
+- name: remove operator namespace
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ operator_namespace }}"
+  ignore_errors: true
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+

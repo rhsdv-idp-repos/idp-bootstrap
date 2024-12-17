@@ -1,3 +1,14 @@
 all:
   vars:
-    
+    # set the following to control the install/uninstall proces
+    # basic developer services, SHOULD be installed by default
+
+    install_devops: true      # Openshift GitOps / Pipelines
+    install_quay: true        # Quay.io
+    install_devspaces: true  # Red Hat OpenShift Dev Spaces
+
+    # software factory services (optional & opinionated)
+    install_developerhub: false   # Red Hat Developer Hub
+
+    # other defaults
+    default_password: "admin321"

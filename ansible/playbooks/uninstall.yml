@@ -7,18 +7,27 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
-    - name: Install all gitops and pipeline services
+    - name: Install OpenShift Developer Hub and related services
       include_role:
-        name: ../roles/gitops_basics
-      when: install_gitops
+        name: ../roles/install_developer_hub
+      when: install_developer_hub
 
-    - name: Install quay and related services
+    - name: Un-Install OpenShift Dev Spaces and related services
       include_role:
-        name: ../roles/quay_basics
+        name: ../roles/install_devspaces
+      when: install_devspaces
+
+    - name: Un-Install Red Hat Quay and related services
+      include_role:
+        name: ../roles/install_quay
       when: install_quay
-      
-  #roles:
-  #  - role: ../roles/developerhub_basics
-  #  - role: ../roles/devspaces_basics
-  #  - role: ../roles/quay_basics
-  #  - role: ../roles/gitops_basics
+
+    - name: Un-Install Hashicorp Vault related services
+      include_role:
+        name: ../roles/install_vault
+      when: install_vault
+
+    - name: Un-Install all DevOps services
+      include_role:
+        name: ../roles/install_devops
+      when: install_devops

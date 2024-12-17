@@ -1,0 +1,101 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+- name: running uninstall tasks
+  debug:
+    msg: "Running uninstallation tasks for {{ role_name }}"
+
+- name: remove bootstrap app
+  k8s:
+    state: absent
+    kind: Application
+    api_version: argoproj.io/v1alpha1
+    name: "{{ idp_prefix }}-bootstrap"
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
+- name: remove infrastructure app project
+  k8s:
+    state: absent
+    kind: AppProject
+    api_version: argoproj.io/v1alpha1
+    name: "{{ idp_prefix }}-infrastructure"
+    namespace: "{{ idp_prefix }}-infrastructure"
+  ignore_errors: true
+
+- name: remove default infrastructure app project
+  k8s:
+    state: absent
+    kind: AppProject
+    api_version: argoproj.io/v1alpha1
+    name: "default"
+    namespace: "{{ idp_prefix }}-infrastructure"
+  ignore_errors: true
+
+- name: remove infrastructure gitops instance
+  k8s:
+    state: absent
+    kind: ArgoCD
+    api_version: argoproj.io/v1beta1
+    name: "{{ idp_prefix }}-gitops"
+    namespace: "{{ idp_prefix }}-infrastructure"
+  ignore_errors: true
+
+- name: remove bootstrap app project
+  k8s:
+    state: absent
+    kind: AppProject
+    api_version: argoproj.io/v1alpha1
+    name: "{{ idp_prefix }}-bootstrap"
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
+- name: remove default gitops app project
+  k8s:
+    state: absent
+    kind: AppProject
+    api_version: argoproj.io/v1alpha1
+    name: "default"
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
+- name: remove default gitops instance
+  k8s:
+    state: absent
+    kind: ArgoCD
+    api_version: argoproj.io/v1beta1
+    name: "openshift-gitops"
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
+- name: remove all remaining idp namespaces
+  k8s:
+    state: absent
+    kind: Namespace
+    name: "{{ item }}"
+  loop:
+    - "idp-developer-hub"
+    - "idp-devspaces"
+    - "idp-quay"
+    - "idp-vault"
+    - "idp-infrastructure"
+  ignore_errors: true
+
+- name: uninstall gitops operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "openshift-gitops-operator"
+
+- name: uninstall pipelines operator
+  include_role:
+    name: roles/install_operator
+  vars:
+    operator_subscription_name: "openshift-pipelines-operator"
+  
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+

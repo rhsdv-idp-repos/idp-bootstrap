@@ -1,0 +1,16 @@
+# Implement your post-install deployment tasks here
+# -------------------------------------------------
+- name: create application
+  k8s:
+    state: present
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+  loop:
+    - openshift-backstage-instance.yml.j2
+
+# Leave these as the last tasks in the playbook
+- name: post_install tasks complete
+  debug:
+    msg: "Post-Install tasks completed successfully."
+  when:
+    - not silent|bool
+

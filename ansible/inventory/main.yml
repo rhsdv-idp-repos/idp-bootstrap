@@ -1,10 +1,26 @@
 all:
   vars:
     # set the following to control the install/uninstall proces
-    install_gitops: true
-    install_devspaces: true
-    install_devhub: true
-    install_quay: true
+    
+    # basic developer services, SHOULD be installed by default
+    install_devops: false #true      # Openshift GitOps / Pipelines
+    install_vault: true #true      # Hashicorp Vault
+    install_quay: false #true        # Quay.io
+    install_devspaces: false #true   # Red Hat OpenShift Dev Spaces
+
+    # software factory services (optional & opinionated)
+    install_developer_hub: false #true   # Red Hat Developer Hub
+    install_gitlab: false #true        # GitLab
 
     # other defaults
-    default_password: "admin321"
+    default_password: "admin321"  # used for all passwords if not overridden
+    idp_prefix: "idp"             # used in e.g. namespace creation
+
+    # default repo for all the GitOps apps
+    idp_bootstrap_git_repo_url: "https://github.com/rhsdv-idp-repos/idp-bootstrap"
+    idp_bootstrap_git_repo_revision: "develop"
+
+    # default repo for all the Helm Charts
+    idp_bootstrap_helm_repo_url: "https://github.com/rhsdv-idp-repos/idp-bootstrap" # "https://github.com/redhat-gpte-devopsautomation/agnosticg"
+    idp_bootstrap_helm_repo_revision: "develop"
+    

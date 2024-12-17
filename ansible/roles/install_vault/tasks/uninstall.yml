@@ -1,0 +1,22 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+- name: running uninstall tasks
+  debug:
+    msg: "Running uninstallation tasks for {{ role_name }}"
+
+- name: remove app
+  k8s:
+    state: absent
+    kind: Application
+    api_version: argoproj.io/v1alpha1
+    name: idp-vault
+    namespace: "openshift-gitops"
+  ignore_errors: true
+
+# Leave these as the last tasks in the playbook
+- name: uninstall tasks complete
+  debug:
+    msg: "Uninstall tasks completed successfully."
+  when:
+    - not silent|bool
+
