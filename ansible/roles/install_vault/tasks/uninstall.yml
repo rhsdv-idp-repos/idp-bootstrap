@@ -9,7 +9,7 @@
     state: absent
     kind: Application
     api_version: argoproj.io/v1alpha1
-    name: vault
+    name: idp-vault
     namespace: "openshift-gitops"
   ignore_errors: true
 

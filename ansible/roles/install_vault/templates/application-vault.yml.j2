@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: vault
-  namespace: "{{ idp_prefix }}-infrastructure"
+  name: idp-vault
+  #namespace: "openshift-gitops"
 spec:
   destination:
     namespace: {{ idp_prefix }}-vault
     server: 'https://kubernetes.default.svc'
-  project: "{{ idp_prefix }}-infrastructure"
+  project: "{{ idp_prefix }}-bootstrap"
   source:
     path: charts/hashicorp-vault
     repoURL: {{ idp_bootstrap_helm_repo_url }}
